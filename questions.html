@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ABC College</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: url('background2.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      position: relative;
+      background: rgba(255, 255, 255, 0.59);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      max-width: 800px;
+      width: 100%;
+      padding: 2rem 2.5rem 3rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      z-index: 1;
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    nav {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #3333cc;
+      font-weight: 600;
+    }
+
+    .filter-container {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-container select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+    }
+
+    .question-box {
+      background: rgba(240, 244, 255, 0.85);
+      border-radius: 12px;
+      padding: 1rem 1.3rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 100, 0.1);
+    }
+
+    .question-text {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .category-tag {
+      font-size: 0.9rem;
+      background: #ddd;
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .answer-list {
+      padding-left: 1rem;
+      margin: 0.5rem 0;
+    }
+
+    .answer-list li {
+      margin-bottom: 0.3rem;
+    }
+
+    .answer-list li button {
+      margin-left: 1rem;
+      color: red;
+      font-size: 0.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 100%;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      padding: 0.8rem;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 0.5rem;
+      background: #5555ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #000dff;
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .pagination button {
+      margin: 0 0.5rem;
+    }
+
+    .delete-btn {
+      background: #ff4d4d;
+      margin-left: 10px;
+    }
+
+    .status {
+      color: green;
+      margin-top: 0.3rem;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>ABC College</h1>
+    <h2>Anonymous Q/A Platform</h2>
+
+    <nav>
+      <a href="index.html">Ask a Question</a> |
+      <a href="questions.html">View Questions</a>
+    </nav>
+
+    <div class="filter-container">
+      <label for="category">Filter by category: </label>
+      <select id="category" onchange="loadQuestions()">
+        <option value="All">All</option>
+        <option value="Hostel">🏠 Hostel</option>
+        <option value="Academics">📘 Academics</option>
+        <option value="Sports">🏅 Sports</option>
+        <option value="Internships">💼 Internships</option>
+        <option value="Clubs">🎯 Clubs</option>
+        <option value="Technical Support">🛠️ Technical Support</option>
+        <option value="Others">🔖 Others</option>
+      </select>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <div class="pagination">
+      <button onclick="prevPage()">Back</button>
+      <button onclick="nextPage()">Next</button>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    const perPage = 5;
+
+    function loadQuestions() {
+      const category = document.getElementById('category').value;
+      const allQuestions = JSON.parse(localStorage.getItem('questions') || '[]');
+      const filtered = category === 'All' ? allQuestions : allQuestions.filter(q => q.category === category);
+
+      const start = (currentPage - 1) * perPage;
+      const paginated = filtered.slice(start, start + perPage);
+
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = '';
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p style="text-align:center">No questions available in this category.</p>`;
+        return;
+      }
+
+      paginated.forEach((q, index) => {
+        const div = document.createElement('div');
+        div.className = 'question-box';
+
+        div.innerHTML = `
+          <div class="question-text">Q: ${q.question}</div>
+          <div class="category-tag">${q.category}</div>
+        `;
+
+        const ul = document.createElement('ul');
+        ul.className = 'answer-list';
+        q.answers.forEach((a, ai) => {
+          const li = document.createElement('li');
+          li.innerHTML = `${a} <button onclick="deleteAnswer(${index + start}, ${ai})">Delete</button>`;
+          ul.appendChild(li);
+        });
+        div.appendChild(ul);
+
+        const form = document.createElement('form');
+        form.innerHTML = `
+          <textarea required placeholder="Write your answer..."></textarea><br/>
+          <button type="submit">Submit Answer</button>
+          <span class="status" style="display:none;">Submitted!</span>
+        `;
+
+        form.onsubmit = (e) => {
+          e.preventDefault();
+          const val = form.querySelector('textarea').value.trim();
+          if (val) {
+            allQuestions[index + start].answers.push(val);
+            localStorage.setItem('questions', JSON.stringify(allQuestions));
+            form.querySelector('.status').style.display = 'inline';
+            setTimeout(() => loadQuestions(), 800);
+          }
+        };
+
+        div.appendChild(form);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = 'Delete Question';
+        deleteBtn.onclick = () => {
+          if (confirm('Delete this question?')) {
+            allQuestions.splice(index + start, 1);
+            localStorage.setItem('questions', JSON.stringify(allQuestions));
+            loadQuestions();
+          }
+        };
+
+        div.appendChild(deleteBtn);
+        container.appendChild(div);
+      });
+    }
+
+    function deleteAnswer(qIndex, aIndex) {
+      const questions = JSON.parse(localStorage.getItem('questions') || '[]');
+      questions[qIndex].answers.splice(aIndex, 1);
+      localStorage.setItem('questions', JSON.stringify(questions));
+      loadQuestions();
+    }
+
+    function nextPage() {
+      currentPage++;
+      loadQuestions();
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        loadQuestions();
+      }
+    }
+
+    loadQuestions();
+  </script>
+</body>
+</html>
