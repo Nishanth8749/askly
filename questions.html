@@ -9,155 +9,146 @@
 
     body {
       font-family: 'Roboto', sans-serif;
-      background: url('background2.jpg') no-repeat center center fixed;
+      background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
       margin: 0;
-      padding: 2rem 1rem;
+      padding: 0;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
-      min-height: 100vh;
+      align-items: center;
     }
 
     .container {
-      position: relative;
-      background: rgba(255, 255, 255, 0.59);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      max-width: 800px;
       width: 100%;
-      padding: 2rem 2.5rem 3rem;
+      max-width: 520px;
+      padding: 2.5rem 2rem 3rem;
       border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-      z-index: 1;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     h1 {
-      text-align: center;
+      margin-bottom: 0.2rem;
       font-weight: 700;
+      color: #fff;
       font-size: 2rem;
-      margin-bottom: 0.5rem;
     }
 
     h2 {
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: 400;
       margin-bottom: 1.5rem;
-      color: #333;
+      font-weight: 400;
+      color: #f0f0f0;
+      font-size: 1.1rem;
     }
 
     nav {
-      text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
     }
 
     nav a {
-      margin: 0 1rem;
+      margin: 0 1.2rem;
       text-decoration: none;
-      color: #3333cc;
+      color: #dde1ff;
       font-weight: 600;
+      transition: color 0.3s ease;
     }
 
-    .filter-container {
-      text-align: center;
-      margin-bottom: 1.5rem;
+    nav a:hover {
+      color: #ffffff;
     }
 
-    .filter-container select {
-      padding: 0.5rem;
+    form {
+      text-align: left;
+    }
+
+    label {
+      font-weight: 600;
+      color: #fff;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    select, textarea {
+      width: 100%;
+      font-family: 'Roboto', sans-serif;
       font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #aaa;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background-color: rgba(255, 255, 255, 0.3);
+      color: #000;
+      transition: border-color 0.3s ease;
     }
 
-    .question-box {
-      background: rgba(240, 244, 255, 0.85);
-      border-radius: 12px;
-      padding: 1rem 1.3rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 100, 0.1);
-    }
-
-    .question-text {
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .category-tag {
-      font-size: 0.9rem;
-      background: #ddd;
-      display: inline-block;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-      color: #333;
-    }
-
-    .answer-list {
-      padding-left: 1rem;
-      margin: 0.5rem 0;
-    }
-
-    .answer-list li {
-      margin-bottom: 0.3rem;
-    }
-
-    .answer-list li button {
-      margin-left: 1rem;
-      color: red;
-      font-size: 0.8rem;
-      background: none;
-      border: none;
-      cursor: pointer;
+    select:focus,
+    textarea:focus {
+      border-color: #aaaaff;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.5);
     }
 
     textarea {
-      width: 100%;
-      border: 1.5px solid #ccc;
-      border-radius: 8px;
-      padding: 0.8rem;
+      min-height: 120px;
       resize: vertical;
     }
 
     button {
-      margin-top: 0.5rem;
-      background: #5555ff;
+      margin-top: 1.3rem;
+      width: 100%;
+      background-color: #5555ff;
       color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.8rem 0;
       border: none;
-      border-radius: 8px;
-      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
       cursor: pointer;
-      font-weight: 600;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background: #000dff;
+      background-color: #000dff;
     }
 
-    .pagination {
+    .success-message {
+      margin-top: 1rem;
+      color: #d2ffd2;
+      font-weight: 600;
+      display: none;
       text-align: center;
-      margin-top: 2rem;
     }
 
-    .pagination button {
-      margin: 0 0.5rem;
-    }
-
-    .delete-btn {
-      background: #ff4d4d;
-      margin-left: 10px;
-    }
-
-    .status {
-      color: green;
-      margin-top: 0.3rem;
-      display: inline-block;
+    select option {
+      padding: 0.5rem;
     }
   </style>
 </head>
-<body>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCg7r9kAAwsYJatKcHuJ_LSoMHl8SZ_K8E",
+    authDomain: "askly-97a84.firebaseapp.com",
+    databaseURL: "https://askly-97a84-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "askly-97a84",
+    storageBucket: "askly-97a84.firebasestorage.app",
+    messagingSenderId: "826650889981",
+    appId: "1:826650889981:web:733240e6caae5d761e7894"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+</script>
+
+<body>
   <div class="container">
     <h1>ABC College</h1>
     <h2>Anonymous Q/A Platform</h2>
@@ -167,122 +158,55 @@
       <a href="questions.html">View Questions</a>
     </nav>
 
-    <div class="filter-container">
-      <label for="category">Filter by category: </label>
-      <select id="category" onchange="loadQuestions()">
-        <option value="All">All</option>
+    <form id="questionForm" autocomplete="off">
+      <label for="category">Select Category:</label>
+      <select id="category" name="category" required>
+        <option value="" disabled selected>🧭 Choose a category</option>
         <option value="Hostel">🏠 Hostel</option>
-        <option value="Academics">📘 Academics</option>
+        <option value="Academics">📚 Academics</option>
         <option value="Sports">🏅 Sports</option>
         <option value="Internships">💼 Internships</option>
         <option value="Clubs">🎯 Clubs</option>
         <option value="Technical Support">🛠️ Technical Support</option>
-        <option value="Others">🔖 Others</option>
+        <option value="Others">❓ Others</option>
       </select>
-    </div>
 
-    <div id="questionsContainer"></div>
+      <label for="question">Ask your question anonymously:</label>
+      <textarea id="question" name="question" placeholder="Type your question here..." required></textarea>
 
-    <div class="pagination">
-      <button onclick="prevPage()">Back</button>
-      <button onclick="nextPage()">Next</button>
+      <button type="submit">Submit Question</button>
+    </form>
+
+    <div class="success-message" id="successMessage">
+      ✅ Thank you! Your question has been submitted.
     </div>
   </div>
 
   <script>
-    let currentPage = 1;
-    const perPage = 5;
+    const form = document.getElementById('questionForm');
+    const successMessage = document.getElementById('successMessage');
 
-    function loadQuestions() {
-      const category = document.getElementById('category').value;
-      const allQuestions = JSON.parse(localStorage.getItem('questions') || '[]');
-      const filtered = category === 'All' ? allQuestions : allQuestions.filter(q => q.category === category);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-      const start = (currentPage - 1) * perPage;
-      const paginated = filtered.slice(start, start + perPage);
+      const question = form.question.value.trim();
+      const category = form.category.value;
 
-      const container = document.getElementById('questionsContainer');
-      container.innerHTML = '';
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<p style="text-align:center">No questions available in this category.</p>`;
-        return;
-      }
-
-      paginated.forEach((q, index) => {
-        const div = document.createElement('div');
-        div.className = 'question-box';
-
-        div.innerHTML = `
-          <div class="question-text">Q: ${q.question}</div>
-          <div class="category-tag">${q.category}</div>
-        `;
-
-        const ul = document.createElement('ul');
-        ul.className = 'answer-list';
-        q.answers.forEach((a, ai) => {
-          const li = document.createElement('li');
-          li.innerHTML = `${a} <button onclick="deleteAnswer(${index + start}, ${ai})">Delete</button>`;
-          ul.appendChild(li);
+      if (question && category) {
+        const newQuestionRef = database.ref('questions').push();
+        newQuestionRef.set({
+          category: category,
+          question: question,
+          timestamp: Date.now()
+        }).then(() => {
+          form.reset();
+          successMessage.style.display = 'block';
+          setTimeout(() => {
+            successMessage.style.display = 'none';
+          }, 3000);
         });
-        div.appendChild(ul);
-
-        const form = document.createElement('form');
-        form.innerHTML = `
-          <textarea required placeholder="Write your answer..."></textarea><br/>
-          <button type="submit">Submit Answer</button>
-          <span class="status" style="display:none;">Submitted!</span>
-        `;
-
-        form.onsubmit = (e) => {
-          e.preventDefault();
-          const val = form.querySelector('textarea').value.trim();
-          if (val) {
-            allQuestions[index + start].answers.push(val);
-            localStorage.setItem('questions', JSON.stringify(allQuestions));
-            form.querySelector('.status').style.display = 'inline';
-            setTimeout(() => loadQuestions(), 800);
-          }
-        };
-
-        div.appendChild(form);
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.textContent = 'Delete Question';
-        deleteBtn.onclick = () => {
-          if (confirm('Delete this question?')) {
-            allQuestions.splice(index + start, 1);
-            localStorage.setItem('questions', JSON.stringify(allQuestions));
-            loadQuestions();
-          }
-        };
-
-        div.appendChild(deleteBtn);
-        container.appendChild(div);
-      });
-    }
-
-    function deleteAnswer(qIndex, aIndex) {
-      const questions = JSON.parse(localStorage.getItem('questions') || '[]');
-      questions[qIndex].answers.splice(aIndex, 1);
-      localStorage.setItem('questions', JSON.stringify(questions));
-      loadQuestions();
-    }
-
-    function nextPage() {
-      currentPage++;
-      loadQuestions();
-    }
-
-    function prevPage() {
-      if (currentPage > 1) {
-        currentPage--;
-        loadQuestions();
       }
-    }
-
-    loadQuestions();
+    });
   </script>
 </body>
 </html>
